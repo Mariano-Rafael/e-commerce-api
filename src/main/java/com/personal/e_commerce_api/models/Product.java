@@ -22,6 +22,7 @@ public class Product {
     private String name;
     private Double price;
     private String description;
+    private String category;
 
     @ManyToMany(mappedBy = "product")
     private List<ShoppingCart> shoppingCart;
