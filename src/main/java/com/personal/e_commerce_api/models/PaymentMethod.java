@@ -1,11 +1,15 @@
 package com.personal.e_commerce_api.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 // Representa um método específico de pagamento associado à uma compra feita por um usuário;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "payment_method")
 public class PaymentMethod implements Payment {
