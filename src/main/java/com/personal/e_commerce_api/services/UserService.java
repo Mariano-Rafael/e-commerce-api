@@ -25,9 +25,35 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public void deleteUser(User user) {
-        userRepository.delete(user);
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
     }
 
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public User updateUser(String email, User userDetails) {
+
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            if (userDetails.getName() != null) {
+                user.setName(userDetails.getName());
+            }
+            if (userDetails.getPassword() != null) {
+                user.setPassword(userDetails.getPassword());
+            }
+            if (userDetails.getDocument() != null) {
+                user.setDocument(userDetails.getDocument());
+            }
+            return userRepository.save(user);
+        }
+        else {
+            throw new RuntimeException("User not found with email: " + email);
+        }
+    }
 
 }
