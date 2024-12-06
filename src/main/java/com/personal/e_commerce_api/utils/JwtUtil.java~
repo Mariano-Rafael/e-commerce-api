@@ -3,6 +3,7 @@ package com.personal.e_commerce_api.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.hibernate.annotations.Comment;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;

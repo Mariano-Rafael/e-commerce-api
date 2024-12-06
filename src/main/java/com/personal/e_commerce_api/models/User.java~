@@ -7,7 +7,7 @@ import java.util.List;
 // Representa um usuário da aplicação e é mapeada como uma entidade no banco de dados;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User {
 
     @Id
