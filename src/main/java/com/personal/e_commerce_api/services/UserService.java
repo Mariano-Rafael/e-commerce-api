@@ -3,6 +3,7 @@ package com.personal.e_commerce_api.services;
 import com.personal.e_commerce_api.models.User;
 import com.personal.e_commerce_api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,8 +13,25 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public User createUser(User user) {
+        if (user.getEmail() == null || user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
+            throw new IllegalArgumentException("Valid email is required");
+        }
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+        if (user.getName() == null || user.getName().isEmpty()) {
+            throw new IllegalArgumentException("Name is required");
+        }
+        if (user.getDocument() == null || user.getDocument().isEmpty()) {
+            throw new IllegalArgumentException("Document is required");
+        }
+        if (user.getPassword() == null || user.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("Password is required");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 

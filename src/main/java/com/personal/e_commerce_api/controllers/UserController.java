@@ -1,5 +1,6 @@
 package com.personal.e_commerce_api.controllers;
 
+import com.personal.e_commerce_api.dto.LoginRequestDTO;
 import com.personal.e_commerce_api.models.User;
 import com.personal.e_commerce_api.services.UserService;
 import com.personal.e_commerce_api.utils.JwtUtil;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -35,7 +37,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequestDTO loginRequestDTO) {
+
+        String email = loginRequestDTO.getEmail();
+        String password = loginRequestDTO.getPassword();
+
         try {
             Optional<User> optionalUser = userService.getUserByEmail(email);
 
@@ -45,7 +51,12 @@ public class UserController {
                 if (passwordEncoder.matches(password, user.getPassword())) {
                     String token = jwtUtil.generateToken(email);
 
-                    return ResponseEntity.ok().body("Bearer " + token);
+                    System.out.printf(token);
+                    return ResponseEntity.ok().body(Map.of(
+                            "token", "Bearer " + token,
+                            "userId", user.getId(),
+                            "email", user.getEmail()
+                    ));
                 }
                 else {
                     return new ResponseEntity<>("Invalid password.", HttpStatus.UNAUTHORIZED);
@@ -76,6 +87,5 @@ public class UserController {
             return new ResponseEntity<>("Error getting user by id: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 }
 
